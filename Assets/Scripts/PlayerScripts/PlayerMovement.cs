@@ -1,64 +1,103 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Vector2 mousePosition;
-    [SerializeField] private float speed;
-    private bool isClicked;
-    private Animator _animator;
-    [SerializeField] private GameObject redBullet;
+    private AudioSource audioSource;
+    private enum CurrentTerrain { FOREST, DESERT, ARCTIC };
+    private Dictionary<CurrentTerrain, AudioClip> footstepDict;
 
-    private void Awake()
-    {
-        _animator = GetComponent<Animator>();
+    [SerializeField] private AudioClip[] footstepClips = new AudioClip[3];
+    private Vector2 mousePosition;
+    private Camera cam;
+    [SerializeField] float velocity;
+    private Rigidbody2D _rigidbody;
+    
+    CurrentTerrain currentTerrain = CurrentTerrain.FOREST;
+    private enum Target { LOCATED, REACHED, ENEMY }
+    Target target;
+
+    private void Awake(){
+        footstepDict = new Dictionary<CurrentTerrain, AudioClip>()
+        {
+           { CurrentTerrain.FOREST, footstepClips[0] },
+           //{ CurrentTerrain.DESERT, footstepClips[1] },
+           { CurrentTerrain.ARCTIC, footstepClips[2] }
+        };
+        audioSource = GetComponent<AudioSource>();
+        target = Target.REACHED;
+        cam = Camera.main;
+        mousePosition = transform.position;
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
-    private void OnMouseOver()
-    {
-        if(Input.GetMouseButtonDown(1))
-            Instantiate(redBullet, transform.position, Quaternion.identity);
-    }
+
     private void Update()
     {
-        if (transform.position == new Vector3(mousePosition.x, mousePosition.y, 0))
-        {
-            _animator.SetBool("RunningLeft", false);
-            _animator.SetBool("RunningRight", false);
-            _animator.SetBool("Idle", true);
+        FootstepsManager(target);
+        if(Input.GetMouseButton(1))
+        { 
+            target = Target.LOCATED;
+            mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
+
+            if(mousePosition.x > transform.position.x)
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            else
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
-        
-        if (Input.GetMouseButton(1))
+
+        if(Vector3.Distance(transform.position, mousePosition) > 0.05f)
         {
-            RaycastHit raycastHit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            target = Target.LOCATED;
+        }
+        else
+        {
+            target = Target.REACHED;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (target == Target.LOCATED)
+        {
+            Vector2 moveDirection = (mousePosition - _rigidbody.position).normalized;
+            _rigidbody.MovePosition(_rigidbody.position + moveDirection * Time.fixedDeltaTime * velocity);
+        }
+    }
+
+    private void FootstepsManager(Target target)
+    {
+        if (target == Target.LOCATED)
+        {
+            if(audioSource.clip != footstepDict[currentTerrain])
+                audioSource.clip = footstepDict[currentTerrain];
             
-            if (Physics.Raycast(ray, out raycastHit, 100f))
-            {
-                if (raycastHit.transform != null)
-                {
-                    Instantiate(redBullet, transform.position, Quaternion.identity);
-                    Debug.Log("hit");
-                }
-            }
-            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            isClicked = true;
+            if(!audioSource.isPlaying)
+                audioSource.Play();
+        }
+        else
+        {
+            audioSource.Stop();
+        }
+    }
 
-            if(transform.position.x < Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        #region Find Current Terrain
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+        {
+            switch (CurrentTerrainLocator.LocateTerrain(transform))
             {
-                _animator.SetBool("RunningRight", true);
-                _animator.SetBool("Idle", false);
-                _animator.SetBool("RunningLeft", false);
-                //right walking
-            }
-            else if(transform.position.x > Camera.main.ScreenToWorldPoint(Input.mousePosition).x)
-            {
-                _animator.SetBool("RunningRight", false);
-                _animator.SetBool("Idle",  false);
-                _animator.SetBool("RunningLeft", true);
-                //left walking
+                case "Forest":
+                    currentTerrain = CurrentTerrain.FOREST;
+                    break;
+                case "Desert":
+                    currentTerrain = CurrentTerrain.DESERT;
+                    break;
+                case "Arctic":
+                    currentTerrain = CurrentTerrain.ARCTIC;
+                    break;
             }
         }
-
-        if(isClicked)
-            transform.position = Vector3.MoveTowards(transform.position, mousePosition, speed * Time.deltaTime);
+        #endregion
     }
 }
