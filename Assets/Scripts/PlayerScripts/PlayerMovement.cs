@@ -35,21 +35,19 @@ public class PlayerMovement : MonoBehaviour
     {
         FootstepsManager(target);
         if(Input.GetMouseButton(1))
-        { 
-            target = Target.LOCATED;
+        {
+            if (Vector3.Distance(transform.position, mousePosition) > 0.05f)
+                target = Target.LOCATED;
+
             mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
 
-            if(mousePosition.x > transform.position.x)
+            if (mousePosition.x > transform.position.x)
                 transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             else
                 transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
 
-        if(Vector3.Distance(transform.position, mousePosition) > 0.05f)
-        {
-            target = Target.LOCATED;
-        }
-        else
+        if(Vector3.Distance(transform.position, mousePosition) < 0.05f)
         {
             target = Target.REACHED;
         }
