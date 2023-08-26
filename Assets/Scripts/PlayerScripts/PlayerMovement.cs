@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,11 +13,20 @@ public class PlayerMovement : MonoBehaviour
     private Camera cam;
     [SerializeField] float velocity;
     private Rigidbody2D _rigidbody;
+    private bool isMovementRestricted;
     
     CurrentTerrain currentTerrain = CurrentTerrain.FOREST;
     private enum Target { LOCATED, REACHED, ENEMY }
     Target target;
 
+    private void OnEnable()
+    {
+        BoobyController.HitDamage += RestrictMovementIfDamaged;
+    }
+    private void OnDisable()
+    {
+        BoobyController.HitDamage -= RestrictMovementIfDamaged;
+    }
     private void Awake(){
         footstepDict = new Dictionary<CurrentTerrain, AudioClip>()
         {
@@ -31,10 +41,24 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void RestrictMovementIfDamaged(int thisValueWillNotBeUsed)
+    {
+        target = Target.REACHED;
+        isMovementRestricted = true;
+        StartCoroutine(DisableMovementRestrictionInAMoment());
+    }
+
+    private IEnumerator DisableMovementRestrictionInAMoment()
+    {
+        yield return new WaitForSeconds(.2f);
+        isMovementRestricted = false;
+    }
+
     private void Update()
     {
+        //Debug.Log(CurrentTerrainLocator.LocateTerrain(transform));
         FootstepsManager(target);
-        if(Input.GetMouseButton(1))
+        if(Input.GetMouseButton(1) && !isMovementRestricted)
         {
             if (Vector3.Distance(transform.position, mousePosition) > 0.05f)
                 target = Target.LOCATED;

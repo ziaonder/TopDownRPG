@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class BoobyController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class BoobyController : MonoBehaviour
     private float floatingTime;
     private readonly float detectionRadius = 3f, attackRadius = 1f;
     private int attackDamage = 5;
-    private bool isPlayerDetected;
+    private bool isPlayerDetected, isCollidable;
     private AudioSource hitSound;
     public static event Action<int> HitDamage;
 
@@ -21,20 +22,48 @@ public class BoobyController : MonoBehaviour
     {
         areaOfEffectObject.GetComponent<SpriteRenderer>().color = Color.cyan;
         target = GameObject.Find("Player").transform;
+        rb = GetComponent<Rigidbody2D>();
+        hitSound = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
-        hitSound = GetComponent<AudioSource>();
+    }
+
+    private void OnTriggerStay2D(Collider2D collider)
+    {
+        if(collider.tag == "Player" && isCollidable)
+        {
+            StartCoroutine(MovePlayer(collider));
+        }
+    }
+
+    private IEnumerator MovePlayer(Collider2D collider)
+    {
+        collider.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        Vector2 closestPoint = collider.ClosestPoint(transform.position);
+
+        if (closestPoint.x > transform.position.x)
+            collider.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(-100f, 0f));
+        else
+            collider.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(100f, 0f));
+
+        if (closestPoint.y > transform.position.y)
+            collider.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 100f));
+        else
+            collider.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, -100f));
+
+        yield return new WaitForSeconds(0.3f);
+
+        collider.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
 
     private void Update()
     {
         DetectPlayer();
     }
-
+    
     private void DetectPlayer()
     {
         if (Vector3.Distance(transform.position, target.position) < detectionRadius && !isPlayerDetected)
@@ -112,10 +141,19 @@ public class BoobyController : MonoBehaviour
     private IEnumerator DisableGravityOnLanding(Rigidbody2D rb)
     {
         yield return new WaitForSeconds(floatingTime);
+        StartCoroutine(ActivateCollisionForAMoment());
+
         rb.gravityScale = 0f;
         rb.velocity = Vector2.zero;
         isPlayerDetected = false;
         AttackOnRange();
+    }
+
+    private IEnumerator ActivateCollisionForAMoment()
+    {
+        isCollidable = true;
+        yield return new WaitForSeconds(0.2f);
+        isCollidable =  false;
     }
 
     private void AttackOnRange()

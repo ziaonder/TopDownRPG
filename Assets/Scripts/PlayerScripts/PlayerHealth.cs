@@ -1,18 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public static PlayerHealth Instance;
-    private int health = 100;
+    private float health = 100;
+    private RectTransform hpScaler;
 
     private void Awake()
     {
-        if(Instance == null)
-            Instance = this;
+        hpScaler = transform.Find("HP Scaler").GetComponent<RectTransform>();
     }
 
     private void OnEnable()
@@ -27,7 +22,13 @@ public class PlayerHealth : MonoBehaviour
 
     public void GetDamage(int damage)
     {
-        health -= damage;
-        Debug.Log(health);
+        if(health > 0)
+        {
+            health -= damage;
+            hpScaler.localScale = new Vector2(health / 100f, hpScaler.localScale.y);
+        }
+
+        if (health <= 0)
+            hpScaler.localScale = new Vector2(0f, hpScaler.localScale.y);
     }
 }

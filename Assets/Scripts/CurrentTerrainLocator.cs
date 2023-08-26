@@ -8,6 +8,7 @@ public static class CurrentTerrainLocator
         Vector2 rayOrigin = new Vector2(transform.position.x, transform.position.y - 0.6f);
         float rayDistance = 250f;
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
+        string[] terrainLayers = new string[] { "TerrainForest", "TerrainDesert", "TerrainArctic" };
         Dictionary<string, int> mapColliderCount = new Dictionary<string, int>()
         {
             {"Forest", 0 },
@@ -15,44 +16,44 @@ public static class CurrentTerrainLocator
             {"Arctic", 0 }
         };
 
-        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up, rayDistance, LayerMask.GetMask("Terrain"));
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, Vector2.left, rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, Vector2.left, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, Vector2.right, rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, Vector2.right, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
         
         Vector2 northEastDirection = new Vector2(1, 1).normalized;
-        hit = Physics2D.Raycast(rayOrigin, northEastDirection, rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, northEastDirection, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
         Vector2 northWestDirection = new Vector2(-1, 1).normalized;
-        hit = Physics2D.Raycast(rayOrigin, northWestDirection, rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, northWestDirection, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
         Vector2 southEastDirection = new Vector2(1, -1).normalized;
-        hit = Physics2D.Raycast(rayOrigin, southEastDirection, rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, southEastDirection, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
         Vector2 southWestDirection = new Vector2(-1, -1).normalized;
-        hit = Physics2D.Raycast(rayOrigin, southWestDirection, rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, southWestDirection, rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
 
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(45), Mathf.Sin(45)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(45), Mathf.Sin(45)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-45), Mathf.Cos(-45)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-45), Mathf.Cos(-45)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(135), Mathf.Sin(135)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(135), Mathf.Sin(135)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-135), Mathf.Cos(-135)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-135), Mathf.Cos(-135)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
 
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(270), Mathf.Sin(270)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(270), Mathf.Sin(270)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-270), Mathf.Cos(-270)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-270), Mathf.Cos(-270)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(90), Mathf.Sin(90)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Cos(90), Mathf.Sin(90)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
-        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-90), Mathf.Cos(-90)), rayDistance, LayerMask.GetMask("Terrain"));
+        hit = Physics2D.Raycast(rayOrigin, new Vector2(Mathf.Sin(-90), Mathf.Cos(-90)), rayDistance, LayerMask.GetMask(terrainLayers));
         hits.Add(hit);
 
         foreach (RaycastHit2D castHit in hits)
