@@ -3,9 +3,9 @@ using UnityEngine;
 
 public static class CurrentTerrainLocator
 {
-    public static string LocateTerrain(Transform transform)
+    public static string LocateTerrain(Vector3 position)
     {
-        Vector2 rayOrigin = new Vector2(transform.position.x, transform.position.y - 0.6f);
+        Vector2 rayOrigin = new Vector2(position.x, position.y - 0.6f);
         float rayDistance = 250f;
         List<RaycastHit2D> hits = new List<RaycastHit2D>();
         string[] terrainLayers = new string[] { "TerrainForest", "TerrainDesert", "TerrainArctic" };

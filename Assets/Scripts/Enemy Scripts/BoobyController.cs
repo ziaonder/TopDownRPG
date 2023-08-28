@@ -1,34 +1,85 @@
+using UnityEngine;
 using System;
 using System.Collections;
-using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class BoobyController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Transform target;
-
     [SerializeField] private GameObject areaOfEffectObject, spritePlayerDetected;
     [SerializeField] private float maximumHeight;
-    private float gravity = -9.807f;
+    private SpriteRenderer spriteRenderer;
+    private float gravity = -9.807f, velocity = 1.5f;
     private float floatingTime;
     private readonly float detectionRadius = 3f, attackRadius = 1f;
     private int attackDamage = 5;
     private bool isPlayerDetected, isCollidable;
     private AudioSource hitSound;
-    public static event Action<int> HitDamage;
+    public static event Action<int> BoobyHitDamage;
+    private enum BoobyState { PATROLLING, REACHED, ENEMYTARGETED }
+    private BoobyState state;
+    private Vector3 patrolPosition;
+    private bool isPatrolCallable = true;
 
     private void Awake()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        patrolPosition = transform.position;
         areaOfEffectObject.GetComponent<SpriteRenderer>().color = Color.cyan;
         target = GameObject.Find("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         hitSound = GetComponent<AudioSource>();
+        state = BoobyState.REACHED;
     }
 
     private void Start()
     {
         rb.gravityScale = 0f;
+    }
+
+    private void Update()
+    {
+        DetectPlayer();
+        Patrol(isPatrolCallable);
+    }
+
+    private void Patrol(bool isCallable)
+    {
+        if (isCallable && !isPlayerDetected)
+        {
+            if (state == BoobyState.REACHED)
+            {
+                patrolPosition = transform.position + new Vector3((int)UnityEngine.Random.Range(-5f, 5f), (int)UnityEngine.Random.Range(-5f, 5f));
+                if (CurrentTerrainLocator.LocateTerrain(patrolPosition) == "Forest")
+                    state = BoobyState.PATROLLING;
+            }
+
+            if (Vector3.Distance(transform.position, patrolPosition) < 0.1f)
+            {
+                state = BoobyState.REACHED;
+                StartCoroutine(DisableEnablePatrolling());
+            }
+
+            if (state == BoobyState.PATROLLING)
+            {
+                Vector3 direction = (patrolPosition - transform.position).normalized;
+                if (Vector2.Distance(transform.position, patrolPosition) > .05f)
+                {
+                    transform.position = Vector2.MoveTowards(transform.position, patrolPosition, velocity * Time.deltaTime);
+                    if (transform.position.x > patrolPosition.x)
+                        spriteRenderer.flipX = false;
+                    else
+                        spriteRenderer.flipX = true;
+                }
+            }
+        }
+    }
+
+    private IEnumerator DisableEnablePatrolling()
+    {
+        isPatrolCallable = false;
+        yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 3f));
+        isPatrolCallable = true;
     }
 
     private void OnTriggerStay2D(Collider2D collider)
@@ -59,22 +110,20 @@ public class BoobyController : MonoBehaviour
         collider.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
 
-    private void Update()
-    {
-        DetectPlayer();
-    }
-    
     private void DetectPlayer()
     {
         if (Vector3.Distance(transform.position, target.position) < detectionRadius && !isPlayerDetected)
         {
+            state = BoobyState.ENEMYTARGETED;
             if (transform.position.x > target.position.x)
-                transform.GetComponent<SpriteRenderer>().flipX = false; // Faces left.
+                spriteRenderer.flipX = false; // Faces left.
             else
-                transform.GetComponent<SpriteRenderer>().flipX = true;  // Faces right.
+                spriteRenderer.flipX = true;  // Faces right.
 
-            StartCoroutine(LockOnTarget()); 
+            StartCoroutine(LockOnTarget());
         }
+        else if (state == BoobyState.ENEMYTARGETED)
+            state = BoobyState.REACHED;
 
         if (isPlayerDetected)
             spritePlayerDetected.SetActive(true);
@@ -85,6 +134,7 @@ public class BoobyController : MonoBehaviour
     private IEnumerator LockOnTarget()
     {
         isPlayerDetected = true;
+        
         yield return new WaitForSeconds(2);
         if (Vector3.Distance(transform.position, target.position) < detectionRadius)
         {
@@ -162,8 +212,13 @@ public class BoobyController : MonoBehaviour
 
         if(hit != null)
         {
-            HitDamage?.Invoke(attackDamage);
+            BoobyHitDamage?.Invoke(attackDamage);
             hitSound.Play();
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        //Gizmos.DrawSphere(transform.position, detectionRadius);
     }
 }

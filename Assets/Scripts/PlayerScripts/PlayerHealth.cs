@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    private float health = 100;
+    private static float health = 100;
     private RectTransform hpScaler;
 
     private void Awake()
@@ -12,12 +12,19 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnEnable()
     {
-        BoobyController.HitDamage += GetDamage;
+        BoobyController.BoobyHitDamage += GetDamage;
+        GlutterflyProjectile.GlutterflyHitDamage += GetDamage;
     }
 
     private void OnDisable()
     {
-        BoobyController.HitDamage -= GetDamage;
+        BoobyController.BoobyHitDamage -= GetDamage;
+        GlutterflyProjectile.GlutterflyHitDamage -= GetDamage;
+    }
+
+    public static float GetHealth()
+    {
+        return health;
     }
 
     public void GetDamage(int damage)
@@ -26,6 +33,7 @@ public class PlayerHealth : MonoBehaviour
         {
             health -= damage;
             hpScaler.localScale = new Vector2(health / 100f, hpScaler.localScale.y);
+
         }
 
         if (health <= 0)

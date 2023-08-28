@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private AudioSource audioSource;
     private enum CurrentTerrain { FOREST, DESERT, ARCTIC };
     private Dictionary<CurrentTerrain, AudioClip> footstepDict;
+    public static event Action<string, bool> OnAnimationChange;
 
     [SerializeField] private AudioClip[] footstepClips = new AudioClip[3];
     private Vector2 mousePosition;
@@ -21,11 +24,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        BoobyController.HitDamage += RestrictMovementIfDamaged;
+        BoobyController.BoobyHitDamage += RestrictMovementIfDamaged;
     }
     private void OnDisable()
     {
-        BoobyController.HitDamage -= RestrictMovementIfDamaged;
+        BoobyController.BoobyHitDamage -= RestrictMovementIfDamaged;
     }
     private void Awake(){
         footstepDict = new Dictionary<CurrentTerrain, AudioClip>()
@@ -61,7 +64,11 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetMouseButton(1) && !isMovementRestricted)
         {
             if (Vector3.Distance(transform.position, mousePosition) > 0.05f)
+            {
                 target = Target.LOCATED;
+                OnAnimationChange?.Invoke("isRunning", true);
+                OnAnimationChange?.Invoke("isIdle", false);
+            }
 
             mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -74,6 +81,8 @@ public class PlayerMovement : MonoBehaviour
         if(Vector3.Distance(transform.position, mousePosition) < 0.05f)
         {
             target = Target.REACHED;
+            OnAnimationChange?.Invoke("isIdle", true);
+            OnAnimationChange?.Invoke("isRunning", false);
         }
     }
 
@@ -107,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
         #region Find Current Terrain
         if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
         {
-            switch (CurrentTerrainLocator.LocateTerrain(transform))
+            switch (CurrentTerrainLocator.LocateTerrain(new Vector2(transform.position.x, transform.position.y)))
             {
                 case "Forest":
                     currentTerrain = CurrentTerrain.FOREST;
