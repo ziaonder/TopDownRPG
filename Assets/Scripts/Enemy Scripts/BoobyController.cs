@@ -2,85 +2,88 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class BoobyController : MonoBehaviour
+public class BoobyController : PatrolManager
 {
     private Rigidbody2D rb;
-    private Transform target;
-    [SerializeField] private GameObject areaOfEffectObject, spritePlayerDetected;
+    [SerializeField] private GameObject areaOfEffectObject; 
     [SerializeField] private float maximumHeight;
-    private SpriteRenderer spriteRenderer;
-    private float gravity = -9.807f, velocity = 1.5f;
+    private float gravity = -9.807f; 
     private float floatingTime;
-    private readonly float detectionRadius = 3f, attackRadius = 1f;
+    private readonly float attackRadius = 1f;
     private int attackDamage = 5;
-    private bool isPlayerDetected, isCollidable;
+    private bool isCollidable;
     private AudioSource hitSound;
     public static event Action<int> BoobyHitDamage;
-    private enum BoobyState { PATROLLING, REACHED, ENEMYTARGETED }
-    private BoobyState state;
-    private Vector3 patrolPosition;
-    private bool isPatrolCallable = true;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         patrolPosition = transform.position;
         areaOfEffectObject.GetComponent<SpriteRenderer>().color = Color.cyan;
         target = GameObject.Find("Player").transform;
         rb = GetComponent<Rigidbody2D>();
         hitSound = GetComponent<AudioSource>();
-        state = BoobyState.REACHED;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        detectedSpriteObject = transform.Find("SpritePlayerDetected").gameObject;
     }
 
     private void Start()
     {
+        velocity = 1.5f;
         rb.gravityScale = 0f;
+        detectionRadius = 3f;
     }
 
     private void Update()
     {
-        DetectPlayer();
         Patrol(isPatrolCallable);
     }
 
-    private void Patrol(bool isCallable)
+    private void FixedUpdate()
     {
-        if (isCallable && !isPlayerDetected)
-        {
-            if (state == BoobyState.REACHED)
-            {
-                patrolPosition = transform.position + new Vector3((int)UnityEngine.Random.Range(-5f, 5f), (int)UnityEngine.Random.Range(-5f, 5f));
-                if (CurrentTerrainLocator.LocateTerrain(patrolPosition) == "Forest")
-                    state = BoobyState.PATROLLING;
-            }
-
-            if (Vector3.Distance(transform.position, patrolPosition) < 0.1f)
-            {
-                state = BoobyState.REACHED;
-                StartCoroutine(DisableEnablePatrolling());
-            }
-
-            if (state == BoobyState.PATROLLING)
-            {
-                Vector3 direction = (patrolPosition - transform.position).normalized;
-                if (Vector2.Distance(transform.position, patrolPosition) > .05f)
-                {
-                    transform.position = Vector2.MoveTowards(transform.position, patrolPosition, velocity * Time.deltaTime);
-                    if (transform.position.x > patrolPosition.x)
-                        spriteRenderer.flipX = false;
-                    else
-                        spriteRenderer.flipX = true;
-                }
-            }
-        }
+        if(!isPlayerDetected) DetectPlayer();
     }
 
-    private IEnumerator DisableEnablePatrolling()
-    {
-        isPatrolCallable = false;
-        yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 3f));
-        isPatrolCallable = true;
-    }
+    #region deprecated
+    //protected override void Patrol(bool isCallable)
+    //{
+    //    if (isCallable && !isPlayerDetected)
+    //    {
+    //        if (state == State.REACHED)
+    //        {
+    //            patrolPosition = transform.position + new Vector3((int)UnityEngine.Random.Range(-5f, 5f), (int)UnityEngine.Random.Range(-5f, 5f));
+    //            if (CurrentTerrainLocator.LocateTerrain(patrolPosition) == "Forest")
+    //                state = State.PATROLLING;
+    //        }
+
+    //        if (Vector3.Distance(transform.position, patrolPosition) < 0.1f)
+    //        {
+    //            state = State.REACHED;
+    //            StartCoroutine(DisableEnablePatrolling());
+    //        }
+
+    //        if (state == State.PATROLLING)
+    //        {
+    //            Vector3 direction = (patrolPosition - transform.position).normalized;
+    //            if (Vector2.Distance(transform.position, patrolPosition) > .05f)
+    //            {
+    //                transform.position = Vector2.MoveTowards(transform.position, patrolPosition, velocity * Time.deltaTime);
+    //                if (transform.position.x > patrolPosition.x)
+    //                    spriteRenderer.flipX = false;
+    //                else
+    //                    spriteRenderer.flipX = true;
+    //            }
+    //        }
+    //    }
+    //}
+
+    //private IEnumerator DisableEnablePatrolling()
+    //{
+    //    isPatrolCallable = false;
+    //    yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 3f));
+    //    isPatrolCallable = true;
+    //}
+
+    #endregion
 
     private void OnTriggerStay2D(Collider2D collider)
     {
@@ -110,53 +113,57 @@ public class BoobyController : MonoBehaviour
         collider.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
 
-    private void DetectPlayer()
-    {
-        if (Vector3.Distance(transform.position, target.position) < detectionRadius && !isPlayerDetected)
-        {
-            state = BoobyState.ENEMYTARGETED;
-            if (transform.position.x > target.position.x)
-                spriteRenderer.flipX = false; // Faces left.
-            else
-                spriteRenderer.flipX = true;  // Faces right.
+    #region deprecated
+    //protected override void DetectPlayer()
+    //{
+    //    if (Vector3.Distance(transform.position, target.position) < detectionRadius && !isPlayerDetected)
+    //    {
+    //        state = State.ENEMYTARGETED;
+    //        //spriteRenderer.flipX = transform.position.x > target.position.x ? false : true;
+    //        //if (transform.position.x > target.position.x)
+    //        //    spriteRenderer.flipX = false; // Faces left.
+    //        //else
+    //        //    spriteRenderer.flipX = true;  // Faces right.
 
-            StartCoroutine(LockOnTarget());
-        }
-        else if (state == BoobyState.ENEMYTARGETED)
-            state = BoobyState.REACHED;
+    //        StartCoroutine(LockOnTarget());
+    //    }
+    //    else if (state == State.ENEMYTARGETED)
+    //        state = State.REACHED;
 
-        if (isPlayerDetected)
-            spritePlayerDetected.SetActive(true);
-        else
-            spritePlayerDetected.SetActive(false);
-    }
+    //    if (isPlayerDetected)
+    //        detectedSpriteObject.SetActive(true);
+    //    else
+    //        detectedSpriteObject.SetActive(false);
+    //}
+    #endregion
 
-    private IEnumerator LockOnTarget()
+    protected override IEnumerator LockOnTargetAndAttack()
     {
         isPlayerDetected = true;
-        
+        detectedSpriteObject.SetActive(true);
         yield return new WaitForSeconds(2);
-        if (Vector3.Distance(transform.position, target.position) < detectionRadius)
+        Vector3 targetPosition = new Vector3(target.position.x, target.position.y - 0.2f); // This centers the pivot of the player.
+        if (Vector3.Distance(transform.position, targetPosition) < detectionRadius)
         {
-            Launch();
+            Launch(targetPosition);
+            isAttacking = true;
         }
-        else
-        {
-            isPlayerDetected = false;
-        }
+
+        isPlayerDetected = false;
+        detectedSpriteObject.SetActive(false);
     }
-    private void Launch()
+    private void Launch(Vector3 targetPosition)
     {
         rb.gravityScale = 1f;
-        rb.velocity = CalculateLaunchVelocity();
-        StartCoroutine(ActivateAreaOfEffect(floatingTime));
+        rb.velocity = CalculateLaunchVelocity(targetPosition);
+        StartCoroutine(ActivateAreaOfEffect(floatingTime, targetPosition));
         StartCoroutine(DisableGravityOnLanding(rb));
     }
 
-    private Vector2 CalculateLaunchVelocity()
+    private Vector2 CalculateLaunchVelocity(Vector3 targetPosition)
     {
         float displacementX = target.transform.position.x - transform.position.x;
-        float displacementY = target.transform.position.y - transform.position.y;
+        float displacementY = targetPosition.y - transform.position.y;
         if (displacementY <= 0.1f)
             maximumHeight = 1.5f;
         else
@@ -170,9 +177,9 @@ public class BoobyController : MonoBehaviour
         return new Vector2(velocityX, velocityY.y);
     }
 
-    private IEnumerator ActivateAreaOfEffect(float floatingTime)
+    private IEnumerator ActivateAreaOfEffect(float floatingTime, Vector3 targetPosition)
     {
-        GameObject AOE = Instantiate(areaOfEffectObject, target.position, Quaternion.identity);
+        GameObject AOE = Instantiate(areaOfEffectObject, targetPosition, Quaternion.identity);
         SpriteRenderer spriteRenderer = AOE.GetComponent<SpriteRenderer>();
         float timer = 0, colorRate;
         
@@ -196,6 +203,7 @@ public class BoobyController : MonoBehaviour
         rb.gravityScale = 0f;
         rb.velocity = Vector2.zero;
         isPlayerDetected = false;
+        isAttacking = false;
         AttackOnRange();
     }
 
