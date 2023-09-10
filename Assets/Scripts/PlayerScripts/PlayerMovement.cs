@@ -59,11 +59,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log(CurrentTerrainLocator.LocateTerrain(transform));
+        _rigidbody.AddForce(Vector2.zero);
         FootstepsManager(target);
         if(Input.GetMouseButton(1) && !isMovementRestricted)
         {
-            if (Vector3.Distance(transform.position, mousePosition) > 0.05f)
+            if (Vector3.Distance(transform.position, mousePosition) > 0.2f)
             {
                 target = Target.LOCATED;
                 OnAnimationChange?.Invoke("isRunning", true);
@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
 
-        if(Vector3.Distance(transform.position, mousePosition) < 0.05f)
+        if(Vector3.Distance(transform.position, mousePosition) < 0.2f)
         {
             target = Target.REACHED;
             OnAnimationChange?.Invoke("isIdle", true);
@@ -113,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        #region Find Current Terrain
         if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
         {
             switch (CurrentTerrainLocator.LocateTerrain(new Vector2(transform.position.x, transform.position.y)))
@@ -129,6 +128,5 @@ public class PlayerMovement : MonoBehaviour
                     break;
             }
         }
-        #endregion
     }
 }

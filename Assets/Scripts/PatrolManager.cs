@@ -1,11 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.Tilemaps;
 
 public class PatrolManager : MonoBehaviour
 {
     protected float detectionRadius, velocity;
-    [SerializeField] protected Transform target;
+    protected Transform target;
     protected bool isPlayerDetected, isAttacking;
     protected GameObject detectedSpriteObject;
     protected enum State { PATROLLING, REACHED, ENEMYTARGETED }
@@ -20,7 +21,8 @@ public class PatrolManager : MonoBehaviour
         if (Vector3.Distance(transform.position, targetPosition) <= detectionRadius)
         {
             detectedSpriteObject.SetActive(true);
-            spriteRenderer.flipX = transform.position.x > target.position.x ? false : true;
+            if(gameObject.name != "Mushroom")
+                spriteRenderer.flipX = transform.position.x > target.position.x ? false : true;
 
             if (!isPlayerDetected && !isAttacking)
             {
@@ -65,7 +67,8 @@ public class PatrolManager : MonoBehaviour
                 if (Vector2.Distance(transform.position, patrolPosition) > .05f)
                 {
                     transform.position = Vector2.MoveTowards(transform.position, patrolPosition, velocity * Time.deltaTime);
-                    spriteRenderer.flipX = transform.position.x > patrolPosition.x ? false : true;
+                    if(gameObject.name != "Mushroom")
+                        spriteRenderer.flipX = transform.position.x > patrolPosition.x ? false : true;
                 }
             }
         }
@@ -82,7 +85,7 @@ public class PatrolManager : MonoBehaviour
     {
         if (gameObject.name == "Booby" || gameObject.name == "Glutterfly")
             return "Forest";
-        if (gameObject.name == "SlidingThing")
+        if (gameObject.name == "SlidingThing" ||  gameObject.name == "Mushroom")
             return "Arctic";
         else
             return "Desert";

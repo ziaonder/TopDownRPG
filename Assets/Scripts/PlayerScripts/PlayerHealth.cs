@@ -14,12 +14,20 @@ public class PlayerHealth : MonoBehaviour
     {
         BoobyController.BoobyHitDamage += GetDamage;
         GlutterflyProjectile.GlutterflyHitDamage += GetDamage;
+        TartilProjectile.OnTartilAttack += GetDamage;
+        MushroomAOE.OnMushroomDamage += GetDamage;
+        SlidingThingController.OnSlideAttack += GetDamage;
+        KamikazzyController.OnKamikazzyDamage += GetDamage;
     }
 
     private void OnDisable()
     {
         BoobyController.BoobyHitDamage -= GetDamage;
         GlutterflyProjectile.GlutterflyHitDamage -= GetDamage;
+        TartilProjectile.OnTartilAttack -= GetDamage;
+        MushroomAOE.OnMushroomDamage -= GetDamage;
+        SlidingThingController.OnSlideAttack -= GetDamage;
+        KamikazzyController.OnKamikazzyDamage -= GetDamage;
     }
 
     public static float GetHealth()
