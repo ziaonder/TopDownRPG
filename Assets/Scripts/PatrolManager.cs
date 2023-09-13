@@ -14,6 +14,31 @@ public class PatrolManager : MonoBehaviour
     protected Vector3 patrolPosition;
     protected bool isPatrolCallable = true;
     protected SpriteRenderer spriteRenderer;
+    protected int health;
+    private void OnEnable()
+    {
+        WeaponManager.OnEnemyHit += GetDamage;   
+        PistolBullet.OnBulletHit += GetDamage;
+    }
+
+    private void OnDisable()
+    {
+        WeaponManager.OnEnemyHit -= GetDamage;
+        PistolBullet.OnBulletHit -= GetDamage;
+    }
+    
+    private void GetDamage(GameObject hitObject, int hitDamage)
+    {
+        if (hitObject == gameObject)
+        {
+            health -= hitDamage;
+        }
+
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     protected virtual void DetectPlayer()
     {

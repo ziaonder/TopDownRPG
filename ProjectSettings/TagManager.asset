@@ -16,7 +16,7 @@ TagManager:
   - TerrainForest
   - TerrainDesert
   - TerrainArctic
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -44,6 +44,9 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Weapon
+    uniqueID: 2988907831
     locked: 0
   - name: Player
     uniqueID: 1875601545

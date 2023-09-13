@@ -8,6 +8,7 @@ public class GlutterflyController : PatrolManager
 
     private void Awake()
     {
+        health = 10;
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         patrolPosition = transform.position;

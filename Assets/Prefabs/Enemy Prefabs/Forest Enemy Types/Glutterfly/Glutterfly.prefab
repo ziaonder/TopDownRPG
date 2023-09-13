@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 6004877802772300893}
   - component: {fileID: 4059396399573913174}
   - component: {fileID: 854990095326590447}
-  m_Layer: 0
+  - component: {fileID: 2064873469990089293}
+  m_Layer: 10
   m_Name: Glutterfly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 5775154162261121474}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6004877802772300893
 SpriteRenderer:
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2996a80bb2b1e0146ae5c5f4eb7eaba4, type: 3}
-  m_Color: {r: 0.5754717, g: 0.3441972, b: 0.561364, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -99,9 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72488376c7f78c468a0db8ce6edc345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  projectilePrefab: {fileID: 7598191486495136203, guid: feb46cc6b648f7d45ba0dfea79796838, type: 3}
-  projectileRangeDedicator: {fileID: 1678900847440755009, guid: adc2be3937fd15a44985014d29016d63, type: 3}
+  projectile: {fileID: 7598191486495136203, guid: feb46cc6b648f7d45ba0dfea79796838, type: 3}
 --- !u!95 &854990095326590447
 Animator:
   serializedVersion: 5
@@ -123,6 +122,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!58 &2064873469990089293
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928343242825127271}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.03208375, y: -0.022458673}
+  serializedVersion: 2
+  m_Radius: 0.5198734
 --- !u!1 &8980904162358086138
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,7 +228,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2104891705
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 16683cd09d23c0847b4f5d3e7ee64db8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

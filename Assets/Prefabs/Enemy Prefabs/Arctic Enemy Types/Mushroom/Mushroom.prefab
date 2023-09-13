@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7992107273004049306}
   - component: {fileID: 227553378474498809}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ Transform:
   - {fileID: 659971828989389402}
   - {fileID: 6816900860505195627}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &227553378474498809
 MonoBehaviour:

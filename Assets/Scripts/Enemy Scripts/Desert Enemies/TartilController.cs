@@ -11,6 +11,7 @@ public class TartilController : PatrolManager
 
     private void Awake()
     {
+        health = 10;
         spriteRenderer = GetComponent<SpriteRenderer>();
         patrolPosition = transform.position;
         detectedSpriteObject = transform.Find("SpritePlayerDetected").gameObject;

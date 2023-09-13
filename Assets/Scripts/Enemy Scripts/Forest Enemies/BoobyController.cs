@@ -18,6 +18,7 @@ public class BoobyController : PatrolManager
 
     private void Awake()
     {
+        health = 10;
         patrolPosition = transform.position;
         areaOfEffectObject.GetComponent<SpriteRenderer>().color = Color.cyan;
         target = GameObject.Find("Player").transform;

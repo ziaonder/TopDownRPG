@@ -10,6 +10,7 @@ public class MushroomController : PatrolManager
 
     private void Awake()
     {
+        health = 10;
         AOE = transform.Find("MushroomAOE").gameObject;
         spriteAOE = AOE.GetComponent<SpriteRenderer>();
         patrolPosition = transform.position;

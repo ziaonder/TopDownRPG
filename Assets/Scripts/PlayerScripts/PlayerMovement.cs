@@ -69,16 +69,12 @@ public class PlayerMovement : MonoBehaviour
                 OnAnimationChange?.Invoke("isRunning", true);
                 OnAnimationChange?.Invoke("isIdle", false);
             }
-
             mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
-
-            if (mousePosition.x > transform.position.x)
-                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            else
-                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
 
-        if(Vector3.Distance(transform.position, mousePosition) < 0.2f)
+        SetFaceDirection();
+
+        if (Vector3.Distance(transform.position, mousePosition) < 0.2f)
         {
             target = Target.REACHED;
             OnAnimationChange?.Invoke("isIdle", true);
@@ -109,6 +105,14 @@ public class PlayerMovement : MonoBehaviour
         {
             audioSource.Stop();
         }
+    }
+
+    private void SetFaceDirection()
+    {
+        if (mousePosition.x > transform.position.x && !WeaponManager.isAttacking)
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        else if (!WeaponManager.isAttacking)
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
     }
 
     private void OnTriggerExit2D(Collider2D collision)

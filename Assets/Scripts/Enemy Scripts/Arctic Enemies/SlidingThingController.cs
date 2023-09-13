@@ -12,6 +12,7 @@ public class SlidingThingController : PatrolManager
 
     private void Awake()
     {
+        health = 10;
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         detectedSpriteObject = transform.Find("SpritePlayerDetected").gameObject;
