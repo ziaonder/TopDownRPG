@@ -8,6 +8,15 @@ public class MushroomController : PatrolManager
     [SerializeField] private GameObject projectilePrefab;
     private float maxProjectileVelocity = 3f;
 
+    private void OnEnable()
+    {
+        OnEnableArrangements();
+    }
+
+    private void OnDisable()
+    {
+        OnDisableArrangements();
+    }
     private void Awake()
     {
         health = 10;

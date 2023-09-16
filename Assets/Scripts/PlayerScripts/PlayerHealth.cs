@@ -1,15 +1,39 @@
+using System;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    private static float health = 100;
-    private RectTransform hpScaler;
+    public static int health;
+    private static RectTransform hpScaler;
+    public static int gold;
+    public static event Action<int> OnHealthChange;
+    [SerializeField] private AudioClip healUpClip, goldPickupClip;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private GameObject healthUI, goldUI, gameOverScreen;
+    private bool isHealthSet = false;
 
     private void Awake()
     {
         hpScaler = transform.Find("HP Scaler").GetComponent<RectTransform>();
+        gameOverScreen.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (!isHealthSet)
+        {
+            hpScaler.localScale = new Vector2(health / 100f, hpScaler.localScale.y);
+            healthUI.GetComponent<HealthUI>().ChangeHealthTextUI(health);
+            isHealthSet = true;
+        }
+
+        if(health <= 0)
+        {
+            Time.timeScale = 0f;
+            gameOverScreen.SetActive(true);
+            PlayerPrefs.SetString(PlayerPrefs.GetInt("SaveSlot").ToString(), " ");
+        }
+    }
     private void OnEnable()
     {
         BoobyController.BoobyHitDamage += GetDamage;
@@ -18,6 +42,11 @@ public class PlayerHealth : MonoBehaviour
         MushroomAOE.OnMushroomDamage += GetDamage;
         SlidingThingController.OnSlideAttack += GetDamage;
         KamikazzyController.OnKamikazzyDamage += GetDamage;
+        BossTartilController.OnBossKamikazzyDamage += GetDamage;
+        CollectableManager.OnGoldCollect += AddGold;
+        CollectableManager.OnHealUp += HealHP;
+        BoobyBossController.BossBoobyHitDamage += GetDamage;
+        BossMushroomController.OnBossSlideAttack += GetDamage;
     }
 
     private void OnDisable()
@@ -28,23 +57,50 @@ public class PlayerHealth : MonoBehaviour
         MushroomAOE.OnMushroomDamage -= GetDamage;
         SlidingThingController.OnSlideAttack -= GetDamage;
         KamikazzyController.OnKamikazzyDamage -= GetDamage;
+        BossTartilController.OnBossKamikazzyDamage -= GetDamage;
+        CollectableManager.OnGoldCollect -= AddGold;
+        CollectableManager.OnHealUp -= HealHP;
+        BoobyBossController.BossBoobyHitDamage -= GetDamage;
+        BossMushroomController.OnBossSlideAttack -= GetDamage;
     }
 
-    public static float GetHealth()
+    private void AddGold(int amount)
     {
-        return health;
+        gold += amount;
+        goldUI.GetComponent<GoldUIScript>().ChangeGoldUIText(gold);
+        audioSource.clip = goldPickupClip;
+
+        audioSource.Play();
+        Debug.Log(gold);
     }
 
-    public void GetDamage(int damage)
+    //public static void UpdateGoldUI()
+    //{
+    //    goldUI.GetComponent<GoldUIScript>().ChangeGoldUIText(gold);
+    //}
+
+    public static void GetDamage(int damage)
     {
         if(health > 0)
         {
             health -= damage;
+            if(health < 0)
+                health = 0;
+            OnHealthChange?.Invoke(health);
             hpScaler.localScale = new Vector2(health / 100f, hpScaler.localScale.y);
-
         }
+    }
 
-        if (health <= 0)
-            hpScaler.localScale = new Vector2(0f, hpScaler.localScale.y);
+    public void HealHP(int amount)
+    {
+        health += amount;
+        audioSource.clip = healUpClip;
+        audioSource.Play();
+        if (health > 100)
+            health = 100;
+        Debug.Log(health);
+        OnHealthChange?.Invoke(health);
+        hpScaler.localScale = new Vector2(health / 100f, hpScaler.localScale.y);
+        Debug.Log(health);
     }
 }

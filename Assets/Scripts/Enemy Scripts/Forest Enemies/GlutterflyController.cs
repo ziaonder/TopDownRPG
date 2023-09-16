@@ -6,6 +6,16 @@ public class GlutterflyController : PatrolManager
     [SerializeField] private GameObject projectile;
     private Animator animator;
 
+    private void OnEnable()
+    {
+        OnEnableArrangements();
+    }
+
+    private void OnDisable()
+    {
+        OnDisableArrangements();
+    }
+
     private void Awake()
     {
         health = 10;

@@ -100,6 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72488376c7f78c468a0db8ce6edc345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpPot: {fileID: 5034975661840325395, guid: bd3dbb6a142061b4fbf80553685f785e, type: 3}
+  gold: {fileID: 1931786956435940976, guid: b8f2bb92d6216dd499a713d851dfb540, type: 3}
   projectile: {fileID: 7598191486495136203, guid: feb46cc6b648f7d45ba0dfea79796838, type: 3}
 --- !u!95 &854990095326590447
 Animator:

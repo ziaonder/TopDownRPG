@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MushroomAOE : MonoBehaviour
 {
-    private int surroundingsDamage = 5, projectileDamage = 2;
+    private int surroundingsDamage = 5, bossSurroundingsDamage = 10, projectileDamage = 2, bossProjectileDamage = 20;
     public static event Action<int> OnMushroomDamage;
     private GameObject player;
     private Vector3 playerPosition, mirrorPlayerPosition;
@@ -19,20 +19,27 @@ public class MushroomAOE : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (gameObject.name == "MushroomAOE" && collision.gameObject.name == "Player")
+        if (gameObject.name.Contains("MushroomAOE")  && collision.gameObject.name == "Player")
         {
-            OnMushroomDamage?.Invoke(surroundingsDamage);
+            if (gameObject.transform.localScale == Vector3.one)
+                OnMushroomDamage?.Invoke(surroundingsDamage);
+            else
+                OnMushroomDamage?.Invoke(bossSurroundingsDamage);
         }
         else if(collision.gameObject.name == "Player")
         {
-            OnMushroomDamage?.Invoke(projectileDamage);
+            if(gameObject.transform.localScale == Vector3.one * 0.3f)
+                OnMushroomDamage?.Invoke(projectileDamage);
+            else
+                OnMushroomDamage?.Invoke(bossProjectileDamage);
+            
             Destroy(gameObject);
         }
     }
 
     private void Update()
     {
-        if(gameObject.name == "MushroomProjectile(Clone)")
+        if(gameObject.name.Contains("MushroomProjectile(Clone)"))
         {
             if (Vector2.Distance(transform.position, playerPosition) < distanceThreshold)
                 Destroy(gameObject);

@@ -6,15 +6,22 @@ public class SlidingThingController : PatrolManager
 {
     private float slideVelocity = 3f;
     private int slideDamage = 6;
-    private Rigidbody2D rb;
     public static event Action<int> OnSlideAttack;
     private bool isAbleToAttack = false;
 
+    private void OnEnable()
+    {
+        OnEnableArrangements();
+    }
+
+    private void OnDisable()
+    {
+        OnDisableArrangements();
+    }
     private void Awake()
     {
         health = 10;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
         detectedSpriteObject = transform.Find("SpritePlayerDetected").gameObject;
         patrolPosition = transform.position;
         target = GameObject.Find("Player").transform;

@@ -131,6 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a07976acef2ea42b837023ad88b089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpPot: {fileID: 5034975661840325395, guid: bd3dbb6a142061b4fbf80553685f785e, type: 3}
+  gold: {fileID: 1931786956435940976, guid: b8f2bb92d6216dd499a713d851dfb540, type: 3}
   projectilePrefab: {fileID: 994176231566673683, guid: a255025af3d62cc44938585e02794de9, type: 3}
 --- !u!1 &8241786261524694616
 GameObject:

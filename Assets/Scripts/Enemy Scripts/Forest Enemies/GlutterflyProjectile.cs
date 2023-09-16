@@ -16,6 +16,11 @@ public class GlutterflyProjectile : MonoBehaviour
 
     private void OnEnable()
     {
+        if (transform.localScale.x == 1.5f)
+            damage = 10;
+        else
+            damage = 2;
+
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = hitSound;
         player = GameObject.Find("Player");

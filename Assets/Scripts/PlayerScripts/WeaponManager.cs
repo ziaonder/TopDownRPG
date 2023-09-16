@@ -18,10 +18,10 @@ public class WeaponManager : MonoBehaviour
     public AudioClip clubSound, swingSound, spearSound, axeSound, pistolSound;
     [SerializeField] private AudioSource weaponHitSoundSource, swingSoundSource;  
     [SerializeField] private Sprite clubSprite, axeSprite, spearSprite, pistolSprite;
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private GameObject bulletPrefab, goldUIScript, axeCost, spearCost, pistolCost;
     private enum HoldingWeapon { Club, Axe, Spear, Pistol };
     HoldingWeapon holdingWeapon = HoldingWeapon.Club;
-    private int clubDamage = 3, axeDamage = 6, spearDamage = 3, pistolDamage = 3;
+    private int clubDamage = 3, axeDamage = 6, spearDamage = 5, pistolDamage = 3;
     private int weaponDamage = 3, bulletVelocity = 10;
     private Vector3 initialPosition, pistolInitialPosition, projectileDifference, mirrorProjectileDifference;
     private struct WeaponSpecs
@@ -61,27 +61,65 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
+        if (PlayerPrefs.GetString("isAxeBought" + PlayerPrefs.GetInt("SaveSlot")) == "false")
+            axeCost.SetActive(true);
+        else
+            axeCost.SetActive(false);
+        if (PlayerPrefs.GetString("isSpearBought" + PlayerPrefs.GetInt("SaveSlot")) == "false")
+            spearCost.SetActive(true);
+        else
+            spearCost.SetActive(false);
+        if (PlayerPrefs.GetString("isPistolBought" + PlayerPrefs.GetInt("SaveSlot")) == "false")
+            pistolCost.SetActive(true);
+        else
+            pistolCost.SetActive(false);
         ChangeWeapon(holdingWeapon);
     }
 
     private void Update()
     {
+        #region Buying Weapons
+        if (Input.GetKeyDown(KeyCode.Alpha2) && PlayerPrefs.GetString("isAxeBought" + PlayerPrefs.GetInt("SaveSlot")) == "false" && PlayerHealth.gold >= 20)
+        {
+            PlayerHealth.gold -= 20;
+            PlayerPrefs.SetString("isAxeBought" + PlayerPrefs.GetInt("SaveSlot"), "true");
+            axeCost.SetActive(false);
+            goldUIScript.GetComponent<GoldUIScript>().ChangeGoldUIText(PlayerHealth.gold);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3) && PlayerPrefs.GetString("isSpearBought" + PlayerPrefs.GetInt("SaveSlot")) == "false" && PlayerHealth.gold >= 50)
+        {
+            PlayerHealth.gold -= 50;
+            PlayerPrefs.SetString("isSpearBought" + PlayerPrefs.GetInt("SaveSlot"), "true");
+            spearCost.SetActive(false);
+            goldUIScript.GetComponent<GoldUIScript>().ChangeGoldUIText(PlayerHealth.gold);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4) && PlayerPrefs.GetString("isPistolBought" + PlayerPrefs.GetInt("SaveSlot")) == "false" && PlayerHealth.gold >= 100)
+        {
+            PlayerHealth.gold -= 100;
+            PlayerPrefs.SetString("isPistolBought" + PlayerPrefs.GetInt("SaveSlot"), "true");
+            pistolCost.SetActive(false);
+            goldUIScript.GetComponent<GoldUIScript>().ChangeGoldUIText(PlayerHealth.gold);
+        }
+        #endregion
+
         if (Input.GetKeyDown(KeyCode.Alpha1) && !isAttacking)
         {
             ChangeWeapon(HoldingWeapon.Club);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && !isAttacking)
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !isAttacking && PlayerPrefs.GetString("isAxeBought" + PlayerPrefs.GetInt("SaveSlot")) == "true")
         {
             ChangeWeapon(HoldingWeapon.Axe);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && !isAttacking)
+        if (Input.GetKeyDown(KeyCode.Alpha3) && !isAttacking && PlayerPrefs.GetString("isSpearBought" + PlayerPrefs.GetInt("SaveSlot")) == "true")
         {
             ChangeWeapon(HoldingWeapon.Spear);
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha4) && !isAttacking)
+        if(Input.GetKeyDown(KeyCode.Alpha4) && !isAttacking && PlayerPrefs.GetString("isPistolBought" + PlayerPrefs.GetInt("SaveSlot")) == "true")
         {
             ChangeWeapon(HoldingWeapon.Pistol);
         }
@@ -99,7 +137,7 @@ public class WeaponManager : MonoBehaviour
                     weaponHitSoundSource.Play();
                     foreach (Collider2D hitObject in hitObjects)
                     {
-                        OnEnemyHit(hitObject.gameObject, weaponDamage);
+                        OnEnemyHit?.Invoke(hitObject.gameObject, weaponDamage);
                     }
                 }
                 else
@@ -124,7 +162,7 @@ public class WeaponManager : MonoBehaviour
                     weaponHitSoundSource.Play();
                     foreach (Collider2D hit in hitColliders)
                     {
-                        OnEnemyHit(hit.gameObject, weaponDamage);
+                        OnEnemyHit?.Invoke(hit.gameObject, weaponDamage);
                     }
                 }else
                     swingSoundSource.Play();
@@ -196,7 +234,7 @@ public class WeaponManager : MonoBehaviour
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position + difference, Quaternion.identity);
         bullet.GetComponent<Rigidbody2D>().velocity = Vector2.right * velocity;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         Destroy(bullet);
     }
     private void ChangeWeapon(HoldingWeapon weaponType)

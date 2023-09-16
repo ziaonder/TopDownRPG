@@ -1,12 +1,13 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class BoobyController : PatrolManager
 {
     private Rigidbody2D rb;
     [SerializeField] private GameObject areaOfEffectObject; 
-    [SerializeField] private float maximumHeight;
+    private float maximumHeight = 3;
     private float gravity = -9.807f; 
     private float floatingTime;
     private readonly float attackRadius = 1f;
@@ -14,7 +15,7 @@ public class BoobyController : PatrolManager
     private bool isCollidable;
     private AudioSource hitSound;
     public static event Action<int> BoobyHitDamage;
-
+    [HideInInspector] public GameObject objectAOE;
 
     private void Awake()
     {
@@ -26,6 +27,16 @@ public class BoobyController : PatrolManager
         hitSound = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         detectedSpriteObject = transform.Find("SpritePlayerDetected").gameObject;
+    }
+
+    private void OnEnable()
+    {
+        OnEnableArrangements();
+    }
+
+    private void OnDisable()
+    {
+        OnDisableArrangements();
     }
 
     private void Start()
@@ -44,48 +55,6 @@ public class BoobyController : PatrolManager
     {
         if(!isPlayerDetected) DetectPlayer();
     }
-
-    #region deprecated
-    //protected override void Patrol(bool isCallable)
-    //{
-    //    if (isCallable && !isPlayerDetected)
-    //    {
-    //        if (state == State.REACHED)
-    //        {
-    //            patrolPosition = transform.position + new Vector3((int)UnityEngine.Random.Range(-5f, 5f), (int)UnityEngine.Random.Range(-5f, 5f));
-    //            if (CurrentTerrainLocator.LocateTerrain(patrolPosition) == "Forest")
-    //                state = State.PATROLLING;
-    //        }
-
-    //        if (Vector3.Distance(transform.position, patrolPosition) < 0.1f)
-    //        {
-    //            state = State.REACHED;
-    //            StartCoroutine(DisableEnablePatrolling());
-    //        }
-
-    //        if (state == State.PATROLLING)
-    //        {
-    //            Vector3 direction = (patrolPosition - transform.position).normalized;
-    //            if (Vector2.Distance(transform.position, patrolPosition) > .05f)
-    //            {
-    //                transform.position = Vector2.MoveTowards(transform.position, patrolPosition, velocity * Time.deltaTime);
-    //                if (transform.position.x > patrolPosition.x)
-    //                    spriteRenderer.flipX = false;
-    //                else
-    //                    spriteRenderer.flipX = true;
-    //            }
-    //        }
-    //    }
-    //}
-
-    //private IEnumerator DisableEnablePatrolling()
-    //{
-    //    isPatrolCallable = false;
-    //    yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 3f));
-    //    isPatrolCallable = true;
-    //}
-
-    #endregion
 
     private void OnTriggerStay2D(Collider2D collider)
     {
@@ -114,30 +83,6 @@ public class BoobyController : PatrolManager
 
         collider.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
-
-    #region deprecated
-    //protected override void DetectPlayer()
-    //{
-    //    if (Vector3.Distance(transform.position, target.position) < detectionRadius && !isPlayerDetected)
-    //    {
-    //        state = State.ENEMYTARGETED;
-    //        //spriteRenderer.flipX = transform.position.x > target.position.x ? false : true;
-    //        //if (transform.position.x > target.position.x)
-    //        //    spriteRenderer.flipX = false; // Faces left.
-    //        //else
-    //        //    spriteRenderer.flipX = true;  // Faces right.
-
-    //        StartCoroutine(LockOnTarget());
-    //    }
-    //    else if (state == State.ENEMYTARGETED)
-    //        state = State.REACHED;
-
-    //    if (isPlayerDetected)
-    //        detectedSpriteObject.SetActive(true);
-    //    else
-    //        detectedSpriteObject.SetActive(false);
-    //}
-    #endregion
 
     protected override IEnumerator LockOnTargetAndAttack()
     {
@@ -182,6 +127,7 @@ public class BoobyController : PatrolManager
     private IEnumerator ActivateAreaOfEffect(float floatingTime, Vector3 targetPosition)
     {
         GameObject AOE = Instantiate(areaOfEffectObject, targetPosition, Quaternion.identity);
+        objectAOE = AOE;
         SpriteRenderer spriteRenderer = AOE.GetComponent<SpriteRenderer>();
         float timer = 0, colorRate;
         

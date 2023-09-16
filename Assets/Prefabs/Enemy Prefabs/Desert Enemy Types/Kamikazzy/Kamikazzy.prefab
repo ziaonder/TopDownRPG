@@ -98,6 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2d81d05a4032fa4197d9f95b4b35ce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpPot: {fileID: 5034975661840325395, guid: bd3dbb6a142061b4fbf80553685f785e, type: 3}
+  gold: {fileID: 1931786956435940976, guid: b8f2bb92d6216dd499a713d851dfb540, type: 3}
   AOEPrefab: {fileID: 3260621364555841543, guid: b9ed7946c5e01ea498d796d4d95df098, type: 3}
 --- !u!1 &8513106046269755245
 GameObject:

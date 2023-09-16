@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     private enum Target { LOCATED, REACHED, ENEMY }
     Target target;
 
+    //public int GetHealth() { return GetComponent<PlayerHealth>().GetHealth(); }
+    public void SetTargetToReached() { target = Target.REACHED; }
     private void OnEnable()
     {
         BoobyController.BoobyHitDamage += RestrictMovementIfDamaged;
@@ -74,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
 
         SetFaceDirection();
 
-        if (Vector3.Distance(transform.position, mousePosition) < 0.2f)
+        if (Vector3.Distance(transform.position, mousePosition) < 0.2f || Input.GetKeyDown(KeyCode.W))
         {
             target = Target.REACHED;
             OnAnimationChange?.Invoke("isIdle", true);

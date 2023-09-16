@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor.Tilemaps;
 
 public class PatrolManager : MonoBehaviour
 {
@@ -15,18 +13,26 @@ public class PatrolManager : MonoBehaviour
     protected bool isPatrolCallable = true;
     protected SpriteRenderer spriteRenderer;
     protected int health;
-    private void OnEnable()
+    public GameObject hpPot, gold;
+
+    public int GetHealth() { return health; }
+    public void SetHealth(int argumentHealth) { health = argumentHealth; }
+    protected void OnEnableArrangements()
     {
-        WeaponManager.OnEnemyHit += GetDamage;   
+        WeaponManager.OnEnemyHit += GetDamage;
         PistolBullet.OnBulletHit += GetDamage;
     }
 
-    private void OnDisable()
+    protected void OnDisableArrangements()
     {
         WeaponManager.OnEnemyHit -= GetDamage;
         PistolBullet.OnBulletHit -= GetDamage;
     }
     
+    public void SetStateToReached()
+    {
+        state = State.REACHED;
+    }
     private void GetDamage(GameObject hitObject, int hitDamage)
     {
         if (hitObject == gameObject)
@@ -36,6 +42,36 @@ public class PatrolManager : MonoBehaviour
 
         if(health <= 0)
         {
+            bool isBoss = false;
+            int chance = Random.Range(0, 100);
+            if (gameObject.name.Contains("BossBooby"))
+                isBoss = true;
+
+            if (isBoss)
+            {
+                Vector3 position = new Vector3(transform.position.x + 0.5f, transform.position.y);
+                Instantiate(gold, transform.position, Quaternion.identity);
+                Instantiate(gold, transform.position, Quaternion.identity);
+                Instantiate(gold, transform.position, Quaternion.identity);
+                Instantiate(gold, transform.position, Quaternion.identity);
+                Instantiate(hpPot, position, Quaternion.identity);
+                Instantiate(hpPot, position, Quaternion.identity);
+            }
+
+            if (chance <= 30)
+            {
+                Instantiate(gold, transform.position, Quaternion.identity);
+
+                if(chance <= 10)
+                {
+                    Vector3 position = new Vector3(transform.position.x + 0.5f, transform.position.y);
+                    Instantiate(hpPot, position, Quaternion.identity);
+                }
+            }
+
+            if (gameObject.name.Contains("BossBooby"))
+                Destroy(gameObject.GetComponent<BoobyBossController>().objectAOE);
+
             Destroy(gameObject);
         }
     }
@@ -65,10 +101,7 @@ public class PatrolManager : MonoBehaviour
         }
     }
 
-    protected virtual IEnumerator LockOnTargetAndAttack()
-    {
-        yield return null;
-    }
+    protected virtual IEnumerator LockOnTargetAndAttack() { yield return null; }
 
     protected virtual void Patrol(bool isCallable)
     {
@@ -92,7 +125,7 @@ public class PatrolManager : MonoBehaviour
                 if (Vector2.Distance(transform.position, patrolPosition) > .05f)
                 {
                     transform.position = Vector2.MoveTowards(transform.position, patrolPosition, velocity * Time.deltaTime);
-                    if(gameObject.name != "Mushroom")
+                    if(!gameObject.name.Contains("Mushroom") || gameObject.name == "BossMushroom")
                         spriteRenderer.flipX = transform.position.x > patrolPosition.x ? false : true;
                 }
             }
@@ -108,9 +141,9 @@ public class PatrolManager : MonoBehaviour
 
     private string GetMovableTerrain()
     {
-        if (gameObject.name == "Booby" || gameObject.name == "Glutterfly")
+        if (gameObject.name.Contains("Booby") || gameObject.name.Contains("Glutterfly") || gameObject.name.Contains("BossBooby"))
             return "Forest";
-        if (gameObject.name == "SlidingThing" ||  gameObject.name == "Mushroom")
+        if (gameObject.name.Contains("SlidingThing") ||  gameObject.name.Contains("Mushroom"))
             return "Arctic";
         else
             return "Desert";

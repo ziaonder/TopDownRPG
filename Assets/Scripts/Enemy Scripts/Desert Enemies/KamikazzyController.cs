@@ -11,6 +11,16 @@ public class KamikazzyController : PatrolManager
     public static event Action<int> OnKamikazzyDamage;
     private bool hasFoundTarget;
 
+    private void OnEnable()
+    {
+        OnEnableArrangements();
+    }
+
+    private void OnDisable()
+    {
+        OnDisableArrangements();
+    }
+
     private void Awake()
     {
         health = 10;

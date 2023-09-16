@@ -23,6 +23,8 @@ public class TartilProjectile : MonoBehaviour
     {
         if (isProjectileLanded)
         {
+            if (gameObject.transform.localScale == Vector3.one * 2)
+                damage = 10;
             if (collision.gameObject.name == "Player" && lastAttackTime == 0f) // Attacks immediately when the player enters the area.
             {
                 OnTartilAttack?.Invoke(damage);

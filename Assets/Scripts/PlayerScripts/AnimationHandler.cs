@@ -12,14 +12,14 @@ public class AnimationHandler : MonoBehaviour
 
     private void Start()
     {
-        currentHealth = PlayerHealth.GetHealth();
+        currentHealth = PlayerHealth.health;
     }
 
     private void Update()
     {
-        if (currentHealth > PlayerHealth.GetHealth())
+        if (currentHealth > PlayerHealth.health)
         {;
-            currentHealth = PlayerHealth.GetHealth();
+            currentHealth = PlayerHealth.health;
             animator.SetBool("isRunning", false);
             animator.SetTrigger("Hurt");
         }
@@ -34,7 +34,7 @@ public class AnimationHandler : MonoBehaviour
         PlayerMovement.OnAnimationChange -= ChangeAnimation;
     }
 
-    private void ChangeAnimation(string state, bool whatIs)
+    public void ChangeAnimation(string state, bool whatIs)
     {
         animator.SetBool(state, whatIs);
     }

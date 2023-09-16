@@ -212,8 +212,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b851c193c9a1dd44b5a4f3423efb551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpPot: {fileID: 5034975661840325395, guid: bd3dbb6a142061b4fbf80553685f785e, type: 3}
+  gold: {fileID: 1931786956435940976, guid: b8f2bb92d6216dd499a713d851dfb540, type: 3}
   areaOfEffectObject: {fileID: 6693445574999736307, guid: 90e589bf9c55b3a489cc382270dc3511, type: 3}
   maximumHeight: 3
+  objectAOE: {fileID: 0}
 --- !u!61 &1181227444421699053
 BoxCollider2D:
   m_ObjectHideFlags: 0

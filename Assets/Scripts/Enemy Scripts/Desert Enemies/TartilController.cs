@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class TartilController : PatrolManager
 {
-    private Rigidbody2D rb;
     [SerializeField] private GameObject projectile, projectileAOE;
     private float maximumProjectileHeight = 3f, gravity = -9.807f;
     private float floatingTime;
+
+    private void OnEnable()
+    {
+        OnEnableArrangements();
+    }
+
+    private void OnDisable()
+    {
+        OnDisableArrangements();
+    }
 
     private void Awake()
     {
@@ -15,7 +24,7 @@ public class TartilController : PatrolManager
         spriteRenderer = GetComponent<SpriteRenderer>();
         patrolPosition = transform.position;
         detectedSpriteObject = transform.Find("SpritePlayerDetected").gameObject;
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Player").transform;
     }
 
