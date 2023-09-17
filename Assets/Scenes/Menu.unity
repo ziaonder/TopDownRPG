@@ -279,7 +279,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &230891062
 RectTransform:
   m_ObjectHideFlags: 0
@@ -317,6 +317,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 1520947774}
+  save1Delete: {fileID: 0}
+  save2Delete: {fileID: 0}
+  save3Delete: {fileID: 0}
   textMesh: {fileID: 1533480021}
 --- !u!114 &230891064
 MonoBehaviour:
@@ -431,7 +434,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &289523712
 RectTransform:
   m_ObjectHideFlags: 0
@@ -563,6 +566,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 1520947774}
+  save1Delete: {fileID: 0}
+  save2Delete: {fileID: 0}
+  save3Delete: {fileID: 0}
   textMesh: {fileID: 1533480021}
 --- !u!1 &308100464
 GameObject:
@@ -583,7 +589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &308100465
 RectTransform:
   m_ObjectHideFlags: 0
@@ -621,6 +627,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 1520947774}
+  save1Delete: {fileID: 0}
+  save2Delete: {fileID: 0}
+  save3Delete: {fileID: 0}
   textMesh: {fileID: 1533480021}
 --- !u!114 &308100467
 MonoBehaviour:
@@ -1229,6 +1238,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 0}
+  save1Delete: {fileID: 0}
+  save2Delete: {fileID: 0}
+  save3Delete: {fileID: 0}
   textMesh: {fileID: 0}
 --- !u!1 &786840200
 GameObject:
@@ -1249,7 +1261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &786840201
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1381,6 +1393,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 1520947774}
+  save1Delete: {fileID: 0}
+  save2Delete: {fileID: 0}
+  save3Delete: {fileID: 0}
   textMesh: {fileID: 1533480021}
 --- !u!1 &848195258
 GameObject:
@@ -1439,6 +1454,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 0}
+  save1Delete: {fileID: 308100464}
+  save2Delete: {fileID: 230891061}
+  save3Delete: {fileID: 1486008293}
   textMesh: {fileID: 0}
 --- !u!114 &848195261
 MonoBehaviour:
@@ -1486,7 +1504,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 848195260}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: PressPlayButton
+        m_MethodName: OnPressPlayButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1688,7 +1706,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1165925779
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1820,6 +1838,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 1520947774}
+  save1Delete: {fileID: 0}
+  save2Delete: {fileID: 0}
+  save3Delete: {fileID: 0}
   textMesh: {fileID: 1533480021}
 --- !u!1 &1486008293
 GameObject:
@@ -1840,7 +1861,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1486008294
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1878,6 +1899,9 @@ MonoBehaviour:
   save2: {fileID: 786840200}
   save3: {fileID: 289523711}
   saveInfoHolder: {fileID: 1520947774}
+  save1Delete: {fileID: 0}
+  save2Delete: {fileID: 0}
+  save3Delete: {fileID: 0}
   textMesh: {fileID: 1533480021}
 --- !u!114 &1486008296
 MonoBehaviour:
@@ -3027,10 +3051,10 @@ RectTransform:
   - {fileID: 1165925779}
   - {fileID: 786840201}
   - {fileID: 289523712}
-  - {fileID: 657366524}
   - {fileID: 308100465}
   - {fileID: 230891062}
   - {fileID: 1486008294}
+  - {fileID: 657366524}
   - {fileID: 1520947775}
   m_Father: {fileID: 0}
   m_RootOrder: 1

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject save1, save2, save3, saveInfoHolder;
+    public GameObject save1, save2, save3, saveInfoHolder, save1Delete, save2Delete, save3Delete;
     public TextMeshProUGUI textMesh;
 
     private void Awake()
@@ -18,6 +18,9 @@ public class MainMenu : MonoBehaviour
         save1.SetActive(true);
         save2.SetActive(true);
         save3.SetActive(true);
+        save1Delete.SetActive(true);
+        save2Delete.SetActive(true);
+        save3Delete.SetActive(true);
     }
 
     public void OnDeleteButtonPressed()

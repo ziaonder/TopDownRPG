@@ -48,7 +48,6 @@ public class BoobyBossController : PatrolManager
     void Update()
     {
         Patrol(isPatrolCallable);
-        Debug.Log(health);
     }
 
     private void FixedUpdate()

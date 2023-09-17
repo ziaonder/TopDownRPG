@@ -83,7 +83,7 @@ public class PatrolManager : MonoBehaviour
         {
             detectedSpriteObject.SetActive(true);
             if(gameObject.name != "Mushroom")
-                spriteRenderer.flipX = transform.position.x > target.position.x ? false : true;
+                //spriteRenderer.flipX = transform.position.x > target.position.x ? false : true;
 
             if (!isPlayerDetected && !isAttacking)
             {

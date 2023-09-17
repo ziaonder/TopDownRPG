@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         footstepDict = new Dictionary<CurrentTerrain, AudioClip>()
         {
            { CurrentTerrain.FOREST, footstepClips[0] },
-           //{ CurrentTerrain.DESERT, footstepClips[1] },
+           { CurrentTerrain.DESERT, footstepClips[1] },
            { CurrentTerrain.ARCTIC, footstepClips[2] }
         };
         audioSource = GetComponent<AudioSource>();
@@ -119,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+        if (collision.gameObject.name.Contains("Tilemap"))
         {
             switch (CurrentTerrainLocator.LocateTerrain(new Vector2(transform.position.x, transform.position.y)))
             {

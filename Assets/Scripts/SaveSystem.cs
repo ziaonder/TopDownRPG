@@ -46,7 +46,7 @@ public class SaveSystem : MonoBehaviour
         playerTransform.GetComponent<AnimationHandler>().ChangeAnimation("isRunning", false);
         playerTransform.GetComponent<AnimationHandler>().ChangeAnimation("isIdle", true);
         PlayerHealth.health = 100;
-        //PlayerHealth.GetDamage(0);
+        PlayerHealth.gold = 0;
         #endregion
 
         Vector3 forestBossPos = forestBossPosition;
