@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public static int health;
+    public static int health = 100;
     private static RectTransform hpScaler;
     public static int gold;
     public static event Action<int> OnHealthChange;

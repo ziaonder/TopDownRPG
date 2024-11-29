@@ -40,15 +40,15 @@ attack pattern is a combination of the distinct attack patterns of the two enemy
     ![gif](gifs/kamikazzy.gif)
     - Tartil attack pattern: Shoots a projectile in a smooth arc targeted to player position. Projectile covers 
       an area for some time and damages the player while the player is on it.  
-    ![gif](gifs/tartil.gif.gif)
+    ![gif](gifs/tartil.gif)
     - BossTartil;  
      ![gif](gifs/bossTartil.gif)
   - **Arctic enemies;**
     - SlidingThing attack pattern: Slides to the player position and damaging the player.  
-    ![gif](gifs/slidingThing.gif.gif)
+    ![gif](gifs/slidingThing.gif)
     - Mushroom attack patterns;
       1. Throws 2 projectiles to the opposite directions. One is targeted to player.
       2. Holds for a moment to blast within a radius, and damaging all in that area.  
-    ![gif](gifs/mushroom.gif.gif)
+    ![gif](gifs/mushroom.gif)
     - BossMushroom;  
      ![gif](gifs/bossMushroom.gif)
