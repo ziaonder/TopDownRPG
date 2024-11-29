@@ -3,27 +3,30 @@
 ## Controls
 |     Key     |     Behaviour    |
 |-------------|------------------|
-|     F5      |        Save      |
+| F5          |        Save      |
 | Right click | Move to position |
-|    Space    | Attack on either positive or negative x direction |
+| Space       | Attack on either positive or negative x direction |
+| ESC         | Pause |
+| W           | Hold player position. |
 
 ## Features
-- Playerprefs save system. Saves only player's and bosses' position. Other enemies are instantiated on each start.
+- Playerprefs save system. Saves only player's and bosses' position, health and gold amount for player. 
+Other enemies are instantiated on each start.
 - TerrainLocator: Enemies have a script for patrolling. They are assigned a position to go but that position is 
 restricted within their own terrain. That is handled by casting 16 different angled rays to count the terrain 
 colliders. Terrains have tilemap collider and they intersect each other at some parts. That's why 16 different
-rays is needed to avoid wrong terrain selection.
+rays are needed to avoid wrong terrain selection.
 - Player can have 4 different weapon throughout the game. Starts with club. Others can be purchased later on.
-  1. Club, lowest damage, low range.
+  1. Club, lowest damage, low range.  
   ![gif](gifs/baston.gif)
-  2. Axe, highest damage, low range.
+  2. Axe, highest damage, low range.  
   ![gif](gifs/axe.gif)
-  3. Spear, moderate damage, high range.
+  3. Spear, moderate damage, high range.  
   ![gif](gifs/spear.gif)  
-  4. Pistol, lowest damage, huge range.
+  4. Pistol, lowest damage, huge range.  
   ![gif](gifs/pistol.gif)
 
-- 3 different terrain(forest, desert, arctic). Each terrain has 2 distinct enemy type. All enemies have some 
+- There are three different terrains(forest, desert, arctic). Each terrain has 2 distinct enemy type. All enemies have some 
 lock up time to the target(player in their case) before attacking. Each terrain features its own boss, whose
 attack pattern is a combination of the distinct attack patterns of the two enemy types native to that terrain.
   - **Forest enemies;**
