@@ -29,7 +29,8 @@ rays are needed to avoid wrong terrain selection.
 - There are three different terrains(forest, desert, arctic). Each terrain has 2 distinct enemy type. All enemies have some 
 lock up time to the target(player in their case) before attacking. Each terrain features its own boss, whose
 attack pattern is a combination of the distinct attack patterns of the two enemy types native to that terrain.  
-**Map**    
+**Map**
+
 ![map image](map.png)  
   - **Forest enemies;**
     - Glutterfly attack pattern: Throws a projectile to that position.
