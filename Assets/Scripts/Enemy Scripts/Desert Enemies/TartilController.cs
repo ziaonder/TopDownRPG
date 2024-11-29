@@ -84,7 +84,7 @@ public class TartilController : PatrolManager
             else
                 maximumProjectileHeight = 3f;
 
-            float time = Mathf.Sqrt((-2 * maximumProjectileHeight) / gravity) + Mathf.Sqrt((2 * (displacementY - maximumProjectileHeight)) / gravity);
+            float time = Mathf.Sqrt(Mathf.Abs((-2 * maximumProjectileHeight) / gravity)) + Mathf.Sqrt(Mathf.Abs((2 * (displacementY - maximumProjectileHeight)) / gravity));
 
             velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * maximumProjectileHeight);
             velocityX = displacementX / time;

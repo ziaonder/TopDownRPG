@@ -4,7 +4,7 @@ using UnityEngine;
 public class CollectableManager : MonoBehaviour
 {
     public static event Action<int> OnHealUp, OnGoldCollect;
-    private int healAmount = 10, goldAmount = 10;
+    private int healAmount = 10, goldAmount = 1000;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
